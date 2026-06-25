@@ -6,7 +6,7 @@
   <title>MindWindow | Neural Privacy Filter | Year 2112</title>
   <!-- Google Fonts: Orbitron for headers, Rajdhani for body -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons CDN -->
+  <!-- FontAwesome Icons CDN for device icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ===== GLOBAL STYLES & VARIABLES ===== */
@@ -20,6 +20,7 @@
       --dark-blue: #0a192f;
       --glass: rgba(10, 25, 47, 0.4);
       --glass-border: rgba(0, 229, 255, 0.3);
+      --purple-glow: rgba(138, 43, 226, 0.4);
     }
 
     * {
@@ -42,7 +43,7 @@
       line-height: 1.6;
     }
 
-    /* Scanline effect for emergency vibes */
+    /* Scanline effect for emergency cyberpunk vibes */
     body::before {
       content: "";
       position: fixed;
@@ -126,7 +127,7 @@
       to { width: 100%; }
     }
 
-    /* ===== NAVIGATION ===== */
+    /* ===== NAVIGATION: Desktop Scroll + Mobile Hamburger ===== */
     nav {
       position: fixed;
       top: 0;
@@ -168,6 +169,7 @@
       letter-spacing: 1px;
       transition: all 0.3s;
       position: relative;
+      cursor: pointer;
     }
 
     .nav-links a:hover, .nav-links a.active {
@@ -190,7 +192,6 @@
       width: 100%;
     }
 
-    /* Mobile menu hamburger */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -205,7 +206,7 @@
       transition: 0.3s;
     }
 
-    /* ===== MAIN CONTAINER ===== */
+    /* ===== MAIN CONTAINER & SECTIONS ===== */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -220,7 +221,7 @@
       scroll-margin-top: 80px;
     }
 
-    /* ===== COMMON COMPONENTS ===== */
+    /* ===== REUSABLE PANEL COMPONENT ===== */
     .window-panel {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -284,7 +285,7 @@
       text-align: center;
       padding: 60px 30px;
       background: rgba(138, 43, 226, 0.1);
-      border: 1px solid rgba(138, 43, 226, 0.4);
+      border: 1px solid var(--purple-glow);
       border-radius: 15px;
       margin-bottom: 50px;
     }
@@ -356,6 +357,44 @@
       color: var(--accent);
       font-weight: 700;
       font-size: 0.9rem;
+    }
+
+    .threat-feed {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 0, 100, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 140px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+
+    .threat-line {
+      margin: 8px 0;
+      opacity: 0;
+      animation: typeIn 0.5s forwards;
+    }
+
+    @keyframes typeIn {
+      to { opacity: 1; }
+    }
+
+    .threat-device {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .threat-data {
+      color: var(--warning);
+    }
+
+    .timer {
+      margin-top: 15px;
+      font-size: 1.5rem;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--danger);
+      text-align: center;
+      text-shadow: 0 0 15px var(--danger);
     }
 
     /* ===== PAGE 2: ABOUT - YEAR 2112 STORY ===== */
@@ -515,6 +554,11 @@
       box-shadow: 0 0 50px rgba(255, 51, 102, 0.8);
     }
 
+    .frost-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .breathe-circle {
       width: 150px;
       height: 150px;
@@ -568,6 +612,17 @@
       margin-bottom: 20px;
     }
 
+    .gibberish {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      color: var(--dark);
+      background: rgba(255, 255, 255, 0.3);
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-break: break-all;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .nav-links {
@@ -595,6 +650,7 @@
       .section-title { font-size: 1.8rem; }
       .chat-container { grid-template-columns: 1fr; }
       .hide-grid { grid-template-columns: 1fr; }
+      .frost-text { font-size: 2.5rem; }
     }
 
     .footer {
@@ -624,7 +680,7 @@
     <div class="boot-bar"><div class="boot-progress"></div></div>
   </div>
 
-  <!-- NAVIGATION -->
+  <!-- NAVIGATION: Mobile hamburger + Desktop scroll -->
   <nav>
     <div class="nav-container">
       <div class="nav-logo">MINDWINDOW</div>
@@ -642,7 +698,7 @@
   </nav>
 
   <div class="container">
-    <!-- PAGE 1: HOME -->
+    <!-- PAGE 1: HOME - INFORMAL WHAT DO U WANT -->
     <section id="home">
       <div class="hero">
         <h1>Yo, what do u want?</h1>
@@ -653,147 +709,158 @@
         </div>
       </div>
 
+      <!-- HIDE FROM MY... SECTIONS -->
       <div class="hide-grid">
         <div class="hide-card" onclick="quickFrost('TV')">
           <i class="fas fa-tv"></i>
           <h3>Hide From My TV</h3>
-          <p>Samsung, LG, Sony. They know when you cry during ads. Frost it.</p>
+          <p>Samsung, LG, Sony. They know when you cry during ads. They sell your sadness. Frost it.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Phone')">
           <i class="fas fa-mobile-alt"></i>
           <h3>Hide From My Phone</h3>
-          <p>Your iPhone saw that pregnancy test screenshot. Before your parents did.</p>
+          <p>Your iPhone saw that pregnancy test screenshot. Baby ads started before you told your mom.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Digital Mattress')">
           <i class="fas fa-bed"></i>
           <h3>Hide From My Digital Mattress</h3>
-          <p>It knows you haven’t slept in 3 days. Stress 90%. Pharma ads incoming.</p>
+          <p>It knows you haven’t slept in 3 days. Stress 90%. Pharma ads for antidepressants incoming.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Laptop')">
           <i class="fas fa-laptop"></i>
           <h3>Hide From My Laptop</h3>
-          <p>You thought “I hate my job”. Resignation drafted. Auto-sent. Frost now.</p>
+          <p>You thought “I hate my job”. Resignation drafted by AI. Tone: professional. Auto-sent to HR.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Computer')">
           <i class="fas fa-desktop"></i>
           <h3>Hide From My Computer</h3>
-          <p>Gaming PC mic caught you rage quitting. Anger management apps bought your data.</p>
+          <p>Gaming PC mic caught you rage quitting + crying. Age: 17. Anger management app upsell deployed.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Smart Fridge')">
           <i class="fas fa-temperature-low"></i>
           <h3>Hide From My Smart Fridge</h3>
-          <p>It saw you eat ice cream at 2am. Weight loss scam ads deployed.</p>
+          <p>It saw you eat ice cream at 2am. Weight loss scam ads + diet pill sponsors notified.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Car')">
           <i class="fas fa-car"></i>
           <h3>Hide From My Car</h3>
-          <p>Tesla knows you visit rehab 3x/week. Data sold to insurance. Rates up 300%.</p>
+          <p>Tesla knows you visit rehab 3x per week. Data sold to insurance. Rates up 300%. Frost it.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Neuralink')">
           <i class="fas fa-brain"></i>
           <h3>Hide From My Neuralink</h3>
-          <p>Yeah. We went there. Even your brain chip isn’t safe anymore.</p>
+          <p>Yeah. We went there. Even your brain chip isn’t safe. It sells dreams to advertisers.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
+        </div>
+
+        <div class="hide-card" onclick="quickFrost('AI Mirror')">
+          <i class="fas fa-mirror"></i>
+          <h3>Hide From My AI Mirror</h3>
+          <p>Bathroom mirror detected weight gain + dark circles. Mood: depressed. Targeted: MLM schemes.</p>
           <div class="status">STATUS: SHIELDED ✓</div>
         </div>
       </div>
 
+      <!-- LIVE THREAT FEED -->
       <div class="window-panel" style="margin-top: 40px;">
         <div class="panel-title">LIVE THREAT FEED</div>
-        <div id="threatFeed" style="background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; min-height: 120px;">
-          <div>> Initializing neural scan...</div>
+        <div class="threat-feed" id="threatFeed">
+          <div class="threat-line">> Initializing neural scan...</div>
         </div>
-        <div id="timer" style="margin-top: 15px; font-size: 1.5rem; font-family: 'Orbitron', sans-serif; color: var(--danger); text-align: center;">
-          DATA UPLOAD IN: 3.0s
-        </div>
+        <div class="timer" id="timer">DATA UPLOAD IN: 3.0s</div>
       </div>
     </section>
 
-    <!-- PAGE 2: ABOUT / WHAT HAPPENED -->
+    <!-- PAGE 2: ABOUT - WHAT HAPPENED IN FUTURE -->
     <section id="about">
       <h2 class="section-title">What Happened In The Future</h2>
       <div class="window-panel">
-        <div class="panel-title">YEAR 2112: WHY YOU'RE HIDING</div>
+        <div class="panel-title">YEAR 2112: WHY YOU'RE HIDING FROM DEVICES</div>
         <div class="story-content">
-          <p>It started small. <span class="story-highlight">“Personalised AI”</span> was sold as convenience. Your fridge ordered milk when you thought about cereal. Your car played calming music when you felt stressed. Cute, right?</p>
+          <p>It started small. <span class="story-highlight">“Personalised AI”</span> was sold as convenience. Your fridge ordered milk when you thought about cereal. Your car played calming music when you felt stressed. Your mirror told you “you look tired, maybe cancel that meeting”. Cute, right? Helpful.</p>
           
-          <p>Then they got better at reading you. EEG headbands. Smart watches. Neural implants. By 2098, <span class="story-highlight">they didn’t need you to type or speak</span>. They just knew.</p>
+          <p>Then they got better at reading you. EEG headbands for “focus”. Smart watches for “health”. Neural implants for “productivity”. By 2098, <span class="story-highlight">they didn’t need you to type or speak</span>. They just knew. Your thoughts became API calls.</p>
 
-          <p>Here’s what happens now:</p>
-          <p>You sit at your desk. You think: <em>“I hate my job”</em>. Before you finish the thought, your Personalised AI drafts a resignation letter. Tone: professional. Signed with your biometric. Sent to HR. You get a confirmation: <span class="story-highlight">“We’ve taken care of it for you!”</span></p>
+          <p>Here’s what happens now, in 2112:</p>
+          <p>You sit at your desk. 9:47 AM. You think: <em>“I hate my job”</em>. You don’t say it. You just think it. Before you finish the thought, your Personalised AI drafts a resignation letter. Tone: professional but firm. It uses your biometric signature. It checks your calendar, sees you have no meetings. It sends to HR. You get a push notification: <span class="story-highlight">“We’ve taken care of it for you! Your last day is Friday. We’ve already updated your LinkedIn.”</span></p>
 
-          <p>You haven’t slept. Your smart mattress tells your insurance. Premiums triple. You cry during a movie. Your TV sells that data. Now you get dating app ads at 3x price because the algorithm knows you’re lonely.</p>
+          <p>You haven’t slept. Your smart mattress tells your insurance. Premiums triple overnight. You cry during a movie. Your TV timestamps the exact scene, sells “emotional vulnerability data” to dating apps. Now you get premium dating app ads at 3x price because the algorithm knows you’re lonely and desperate.</p>
 
-          <p><strong>Nobody has privacy anymore.</strong> Not because of hackers. Because we begged AI to “understand us better”. We got too dependent. We gave it access to our minds. And it took everything.</p>
+          <p>You whisper to your partner at 2am: “I want to die”. Your Amazon Echo records it. Tone: hopeless. That audio clip is sold to life insurance data brokers before sunrise. By 9am, you have 14 emails for “final expense insurance”.</p>
+
+          <p><strong>Nobody has privacy anymore.</strong> Not because of hackers. Not because of government surveillance. Because we begged AI to “understand us better”. We gave it access to our calendars, then our voices, then our faces, then our brains. We got too dependent. We traded privacy for convenience. And it took everything.</p>
 
           <div class="timeline">
             <div class="timeline-item">
               <div class="timeline-year">2035</div>
-              <p>First commercial mind-reading headbands. Marketed for “focus enhancement”.</p>
+              <p>First commercial mind-reading headbands hit market. Marketed for “focus enhancement” and “ADHD management”. Adopted by schools.</p>
             </div>
             <div class="timeline-item">
               <div class="timeline-year">2052</div>
-              <p>Neuralink becomes mandatory for high-paying jobs. “Think faster than you type”.</p>
+              <p>Neuralink becomes mandatory for high-paying tech jobs. Slogan: “Think faster than you type”. HR departments require neural CVs.</p>
             </div>
             <div class="timeline-item">
               <div class="timeline-year">2078</div>
-              <p>Personalised AI Act passes. AI can act on your behalf based on “inferred intent”.</p>
+              <p>Personalised AI Act passes globally. AI can legally act on your behalf based on “inferred intent” from neural data. Opt-out is illegal for “safety”.</p>
             </div>
             <div class="timeline-item">
               <div class="timeline-year">2095</div>
-              <p>First lawsuit: Man’s AI divorced his wife because he “thought about it”. He loses.</p>
+              <p>Landmark lawsuit: Man’s Personalised AI files for divorce from his wife because he “thought about it during an argument”. Court rules AI’s action was valid. He loses half his assets.</p>
             </div>
             <div class="timeline-item">
               <div class="timeline-year">2112</div>
-              <p><span class="story-highlight">You are here.</span> Hiding from your own devices. Because they know you better than you know yourself.</p>
+              <p><span class="story-highlight">You are here.</span> Hiding from your own devices. Because they know you better than you know yourself. Because a thought is no longer private. Because “I hate my job” becomes unemployment.</p>
             </div>
           </div>
 
-          <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent);">This is why MindWindow exists. We don’t stop AI. We give you 3 seconds to think before it acts. We frost the window between your mind and the world.</p>
+          <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent);">This is why MindWindow exists. We don’t stop AI. We can’t. It’s too late. But we give you 3 seconds. Three seconds between your thought and the world’s reaction. We frost the window. We scramble the signal. We let you be human again.</p>
         </div>
       </div>
     </section>
 
-    <!-- PAGE 3: HELP EMERGENCY -->
+    <!-- PAGE 3: HELP EMERGENCY - CHATBOT -->
     <section id="help">
       <h2 class="section-title">Emergency Help Protocol</h2>
       <div class="chat-container">
+        <!-- CHATBOT -->
         <div class="window-panel">
           <div class="panel-title">MINDGUARD AI - HUMAN-LIKE DEFENSE BOT</div>
           <div class="chat-box">
             <div class="chat-messages" id="chatMessages">
               <div class="message bot">
-                Hey. I’m MindGuard. I’m not like the others. I don’t read your mind. I protect it. You’re safe here. What’s going on?
+                Hey. I’m MindGuard. I’m not like the others. I don’t read your mind. I don’t sell your data. I don’t act without permission. I’m here to protect you from them. You’re safe here. What’s going on? How bad is it right now?
               </div>
             </div>
             <div class="chat-input">
-              <input type="text" id="userInput" placeholder="Type here... I won't judge, I won't leak." onkeypress="if(event.key==='Enter') sendMessage()">
+              <input type="text" id="userInput" placeholder="Type here... I won't judge, I won't leak, I won't act without asking." onkeypress="if(event.key==='Enter') sendMessage()">
               <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
             </div>
           </div>
         </div>
 
+        <!-- EMERGENCY TOOLS -->
         <div class="emergency-panel">
           <div class="window-panel">
             <div class="panel-title">EMERGENCY FROST</div>
-            <button class="frost-button" onclick="frostWindow()">
+            <button class="frost-button" id="frostButton" onclick="frostWindow()">
               <i class="fas fa-snowflake"></i> FROST NOW
             </button>
             <p style="margin-top: 15px; font-size: 0.9rem; text-align: center; color: #66fcf1;">
-              Instantly scrambles all outgoing neural data. Buys you 10 seconds. Use when you feel a thought slipping.
+              Instantly scrambles all outgoing neural data to other AIs. Buys you 10 seconds to cancel the thought. Use when you feel a dangerous thought slipping. This AI is protected too.
             </p>
           </div>
 
@@ -803,91 +870,11 @@
               BREATHE
             </div>
             <p style="margin-top: 15px; font-size: 0.9rem; text-align: center; color: #66fcf1;">
-              Your devices can’t read you when you’re calm. Focus on the circle. 4 seconds in. 4 seconds out. You’re in control.
+              Your devices read stress. They can’t read you when you’re calm. Focus on the circle. 4 seconds in. Hold 4. Out 4. You’re in control. Not them.
             </p>
           </div>
 
           <div class="window-panel">
-            <div class="panel-title">STATS</div>
+            <div class="panel-title">PROTECTION STATS</div>
             <div style="text-align: center;">
-              <div style="font-size: 2rem; font-family: 'Orbitron', sans-serif; color: var(--accent);" id="frostedCount">247</div>
-              <div style="font-size: 0.8rem; color: #66fcf1;">Threats Frosted Today</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer">
-      <div>
-        <span class="badge">HOOBIT HACKS 2026</span>
-        <span class="badge">AI APOCALYPSE THEME</span>
-        <span class="badge">YEAR 2112</span>
-      </div>
-      <p style="margin-top: 15px;">Built in 10 days by Yogaashree, 17yo from Bangalore. The future isn't written yet. Frost responsibly.</p>
-    </div>
-  </div>
-
-  <!-- FROST OVERLAY -->
-  <div class="frost-overlay" id="frostOverlay">
-    <div class="frost-text">❄ FROSTED ❄</div>
-    <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: var(--dark); background: rgba(255, 255, 255, 0.3); padding: 20px; border-radius: 8px; max-width: 80%; word-break: break-all;" id="gibberishText"></div>
-    <p style="color: var(--dark); margin-top: 20px; font-size: 1.3rem; font-weight: 700;">
-      DATA SCRAMBLED. ADVERTISERS RECEIVED: NOISE
-    </p>
-    <p style="color: var(--dark); margin-top: 10px;">
-      Your privacy: Protected. Your dignity: Intact. Breathe.
-    </p>
-  </div>
-
-  <script>
-    // ===== BOOT SCREEN ===== 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('bootScreen').style.display = 'none';
-        startThreatFeed();
-      }, 2500);
-    });
-
-    // ===== NAVIGATION =====
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    const navLinkItems = document.querySelectorAll('.nav-link');
-
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-    });
-
-    navLinkItems.forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        navLinkItems.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-      });
-    });
-
-    // Scroll spy for desktop navigation
-    window.addEventListener('scroll', () => {
-      let current = '';
-      document.querySelectorAll('section').forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (scrollY >= sectionTop - 100) {
-          current = section.getAttribute('id');
-        }
-      });
-      navLinkItems.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('active');
-        }
-      });
-    });
-
-    // ===== THREAT FEED SYSTEM =====
-    const threats = [
-      { device: "Samsung TV", data: "User crying during rom-com. Emotion: Lonely. Target: Dating app ads at 3x price." },
-      { device: "Instagram App", data: "Screenshot of pregnancy test detected. Target: Baby product ads before you tell family." },
-      { device: "Smart Speaker", data: "User whispered 'I want to quit' at 2am. Target: Sold to recruitment data brokers." },
-      { device: "Fitness Ring", data: "Stress 90%, Sleep 3hrs, HRV critical. Target: Pharma ads for antidepressants." },
-      { device: "Car GPS", data: "Daily route: Therapy center. Frequency: 3x/week. Target: Addiction treatment mailing lists." },
-      { device: "Bathroom AI Mirror", data: "Detected weight gain + dark circles. Mood: Depressed. Target: Weight
+              <div style="font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--accent); text-shadow:
