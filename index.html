@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MindWindow | Neural Privacy Filter | Year 2112</title>
+  <!-- Google Fonts: Orbitron for headers, Rajdhani for body -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons CDN for device icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    /* ===== GLOBAL STYLES & VARIABLES ===== */
     :root {
       --primary: #00e5ff;
       --secondary: #8a2be2;
@@ -14,8 +17,10 @@
       --danger: #ff3366;
       --warning: #ffaa00;
       --dark: #0a0a0f;
+      --dark-blue: #0a192f;
       --glass: rgba(10, 25, 47, 0.4);
       --glass-border: rgba(0, 229, 255, 0.3);
+      --purple-glow: rgba(138, 43, 226, 0.4);
     }
 
     * {
@@ -36,18 +41,9 @@
       min-height: 100vh;
       overflow-x: hidden;
       line-height: 1.6;
-      transition: all 0.3s;
     }
 
-    body.unshielded {
-      animation: dangerBlink 0.5s infinite alternate;
-    }
-
-    @keyframes dangerBlink {
-      from { box-shadow: inset 0 0 0 0 rgba(255, 51, 102, 0); }
-      to { box-shadow: inset 0 0 100px 50px rgba(255, 51, 102, 0.4); }
-    }
-
+    /* Scanline effect for emergency cyberpunk vibes */
     body::before {
       content: "";
       position: fixed;
@@ -66,6 +62,7 @@
       z-index: 1000;
     }
 
+    /* ===== BOOT SCREEN ===== */
     #bootScreen {
       position: fixed;
       top: 0;
@@ -123,12 +120,14 @@
       background: linear-gradient(90deg, var(--primary), var(--accent));
       width: 0%;
       animation: loadBar 2s forwards;
+      box-shadow: 0 0 10px var(--primary);
     }
 
     @keyframes loadBar {
       to { width: 100%; }
     }
 
+    /* ===== NAVIGATION: Desktop Scroll + Mobile Hamburger ===== */
     nav {
       position: fixed;
       top: 0;
@@ -207,10 +206,11 @@
       transition: 0.3s;
     }
 
+    /* ===== MAIN CONTAINER & SECTIONS ===== */
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 100px 20px;
+      padding: 100px 20px 20px;
       position: relative;
       z-index: 1;
     }
@@ -219,13 +219,9 @@
       min-height: 100vh;
       padding: 40px 0;
       scroll-margin-top: 80px;
-      display: none;
     }
 
-    section.active {
-      display: block;
-    }
-
+    /* ===== REUSABLE PANEL COMPONENT ===== */
     .window-panel {
       background: var(--glass);
       border: 1px solid var(--glass-border);
@@ -284,11 +280,12 @@
       text-shadow: 0 0 20px var(--primary);
     }
 
+    /* ===== PAGE 1: HOME ===== */
     .hero {
       text-align: center;
       padding: 60px 30px;
       background: rgba(138, 43, 226, 0.1);
-      border: 1px solid rgba(138, 43, 226, 0.4);
+      border: 1px solid var(--purple-glow);
       border-radius: 15px;
       margin-bottom: 50px;
     }
@@ -362,16 +359,6 @@
       font-size: 0.9rem;
     }
 
-    .hide-card .status.unshielded {
-      color: var(--danger);
-      animation: statusBlink 0.5s infinite;
-    }
-
-    @keyframes statusBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
     .threat-feed {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 0, 100, 0.3);
@@ -410,6 +397,7 @@
       text-shadow: 0 0 15px var(--danger);
     }
 
+    /* ===== PAGE 2: ABOUT - YEAR 2112 STORY ===== */
     .story-content {
       font-size: 1.1rem;
       line-height: 1.8;
@@ -466,6 +454,7 @@
       margin-bottom: 5px;
     }
 
+    /* ===== PAGE 3: HELP EMERGENCY CHATBOT ===== */
     .chat-container {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -581,7 +570,6 @@
       justify-content: center;
       font-family: 'Orbitron', sans-serif;
       animation: breathe 4s infinite ease-in-out;
-      cursor: pointer;
     }
 
     @keyframes breathe {
@@ -589,6 +577,7 @@
       50% { transform: scale(1.2); box-shadow: 0 0 40px var(--accent); }
     }
 
+    /* ===== FROST OVERLAY ===== */
     .frost-overlay {
       position: fixed;
       top: 0;
@@ -596,11 +585,6 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 229, 255, 0.95);
-      background-image: 
-        radial-gradient(circle at 20% 30%, rgba(255, 255, 0.4) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
-        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 0.1) 10px, rgba(255, 255, 255, 0.1) 20px),
-        repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(200, 230, 255, 0.15) 15px, rgba(200, 230, 255, 0.15) 30px);
       z-index: 9999;
       display: none;
       justify-content: center;
@@ -611,7 +595,7 @@
 
     .frost-overlay.active {
       display: flex;
-      animation: frostIn 0.5s ease-out;
+      animation: frostIn 0.3s ease-out;
     }
 
     @keyframes frostIn {
@@ -624,106 +608,22 @@
       font-size: 4rem;
       font-weight: 900;
       color: var(--dark);
-      text-shadow: 0 0 30px rgba(255, 255, 0.8);
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
       margin-bottom: 20px;
-      animation: iceCrack 0.6s ease-out;
-    }
-
-    @keyframes iceCrack {
-      0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-      50% { transform: scale(1.2) rotate(10deg); }
-      100% { transform: scale(1) rotate(0deg); opacity: 1; }
     }
 
     .gibberish {
       font-family: 'Courier New', monospace;
       font-size: 1.1rem;
       color: var(--dark);
-      background: rgba(255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.3);
       padding: 20px;
       border-radius: 8px;
       max-width: 80%;
       word-break: break-all;
-      border: 2px solid rgba(255, 255, 255, 0.6);
     }
 
-    .unfrost-button {
-      margin-top: 30px;
-      background: var(--dark);
-      color: var(--primary);
-      border: 2px solid var(--primary);
-      padding: 15px 40px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .unfrost-button:hover {
-      background: var(--primary);
-      color: var(--dark);
-      box-shadow: 0 0 30px var(--primary);
-    }
-
-    .unshield-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(10, 10, 15, 0.98);
-      border: 3px solid var(--danger);
-      border-radius: 15px;
-      padding: 40px;
-      z-index: 10000;
-      display: none;
-      text-align: center;
-      box-shadow: 0 0 50px var(--danger);
-      animation: modalPulse 0.5s infinite alternate;
-      max-width: 90%;
-    }
-
-    .unshield-modal.active {
-      display: block;
-    }
-
-    @keyframes modalPulse {
-      from { box-shadow: 0 0 30px var(--danger); }
-      to { box-shadow: 0 0 60px var(--danger); }
-    }
-
-    .unshield-modal h2 {
-      font-family: 'Orbitron', sans-serif;
-      color: var(--danger);
-      font-size: 2rem;
-      margin-bottom: 20px;
-      text-shadow: 0 0 20px var(--danger);
-    }
-
-    .unshield-modal p {
-      color: #66fcf1;
-      margin-bottom: 30px;
-      font-size: 1.1rem;
-    }
-
-    .footer {
-      text-align: center;
-      padding: 40px 20px;
-      color: #445;
-      font-size: 0.85rem;
-      border-top: 1px solid rgba(0, 229, 255, 0.1);
-    }
-
-    .badge {
-      display: inline-block;
-      background: rgba(0, 229, 255, 0.1);
-      border: 1px solid rgba(0, 229, 255, 0.3);
-      padding: 5px 15px;
-      border-radius: 20px;
-      margin: 5px;
-      font-size: 0.75rem;
-    }
-
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .nav-links {
         position: fixed;
@@ -752,6 +652,141 @@
       .hide-grid { grid-template-columns: 1fr; }
       .frost-text { font-size: 2.5rem; }
     }
+
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #445;
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(0, 229, 255, 0.1);
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin: 5px;
+      font-size: 0.75rem;
+    }
+
+    /* ===== UNFROST BUTTON (inside full-screen frost overlay) ===== */
+    .unfrost-button {
+      background: var(--dark);
+      color: var(--primary);
+      border: 3px solid var(--dark);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 16px 40px;
+      border-radius: 15px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .unfrost-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    /* ===== AUTO-UNSHIELD: RED SCREEN BLINK ===== */
+    @keyframes dangerBlink {
+      0%, 100% { background-color: transparent; }
+      50% { background-color: rgba(255, 51, 102, 0.45); }
+    }
+
+    body.blink-danger::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 10000;
+      animation: dangerBlink 0.6s ease-in-out infinite;
+    }
+
+    /* ===== AUTO-UNSHIELD WARNING POPUP ===== */
+    .unshield-popup {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .unshield-popup.active {
+      display: flex;
+      animation: frostIn 0.2s ease-out;
+    }
+
+    .unshield-box {
+      background: var(--dark-blue);
+      border: 2px solid var(--danger);
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 0 50px rgba(255, 51, 102, 0.5);
+    }
+
+    .unshield-icon {
+      font-size: 3rem;
+      color: var(--danger);
+      margin-bottom: 15px;
+      text-shadow: 0 0 20px var(--danger);
+    }
+
+    .unshield-box h2 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--danger);
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .unshield-box p {
+      color: #b0e0e6;
+      margin-bottom: 25px;
+    }
+
+    .unshield-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .reshield-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: var(--dark);
+      border: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      padding: 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: transform 0.2s;
+    }
+
+    .reshield-btn:hover { transform: scale(1.03); }
+
+    .vulnerable-btn {
+      background: transparent;
+      color: #66fcf1;
+      border: 1px solid rgba(102, 252, 241, 0.4);
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .vulnerable-btn:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
   </style>
 </head>
 <body>
@@ -762,14 +797,14 @@
     <div class="boot-bar"><div class="boot-progress"></div></div>
   </div>
 
-  <!-- NAVIGATION -->
+  <!-- NAVIGATION: Mobile hamburger + Desktop scroll -->
   <nav>
     <div class="nav-container">
       <div class="nav-logo">MINDWINDOW</div>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
-        <li><a href="#about" class="nav-link" data-page="about">What Happened</a></li>
-        <li><a href="#help" class="nav-link" data-page="help">Emergency Help</a></li>
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">What Happened</a></li>
+        <li><a href="#help" class="nav-link">Emergency Help</a></li>
       </ul>
       <div class="hamburger" id="hamburger">
         <span></span>
@@ -780,8 +815,8 @@
   </nav>
 
   <div class="container">
-    <!-- PAGE 1: HOME -->
-    <section id="home" class="active">
+    <!-- PAGE 1: HOME - INFORMAL WHAT DO U WANT -->
+    <section id="home">
       <div class="hero">
         <h1>Yo, what do u want?</h1>
         <p>It’s 2112. Your devices read your mind. Literally. Every thought gets sold. Every doubt becomes a decision you didn’t make.</p>
@@ -791,71 +826,73 @@
         </div>
       </div>
 
+      <!-- HIDE FROM MY... SECTIONS -->
       <div class="hide-grid">
         <div class="hide-card" onclick="quickFrost('TV')">
           <i class="fas fa-tv"></i>
           <h3>Hide From My TV</h3>
           <p>Samsung, LG, Sony. They know when you cry during ads. They sell your sadness. Frost it.</p>
-          <div class="status" id="status-TV">STATUS: SHIELDED ✓</div>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Phone')">
           <i class="fas fa-mobile-alt"></i>
           <h3>Hide From My Phone</h3>
           <p>Your iPhone saw that pregnancy test screenshot. Baby ads started before you told your mom.</p>
-          <div class="status" id="status-Phone">STATUS: SHIELDED ✓</div>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Digital Mattress')">
           <i class="fas fa-bed"></i>
           <h3>Hide From My Digital Mattress</h3>
-          <p>It knows you haven't slept in 3 days. Stress 90%. Pharma ads for antidepressants incoming.</p>
-          <div class="status" id="status-Digital Mattress">STATUS: SHIELDED ✓</div>
+          <p>It knows you haven’t slept in 3 days. Stress 90%. Pharma ads for antidepressants incoming.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Laptop')">
           <i class="fas fa-laptop"></i>
           <h3>Hide From My Laptop</h3>
-          <p>You thought "I hate my job". Resignation drafted by AI. Tone: professional. Auto-sent to HR.</p>
-          <div class="status" id="status-Laptop">STATUS: SHIELDED ✓</div>
+          <p>You thought “I hate my job”. Resignation drafted by AI. Tone: professional. Auto-sent to HR.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Computer')">
           <i class="fas fa-desktop"></i>
           <h3>Hide From My Computer</h3>
-          <p>Gaming PC mic caught you rage quitting plus crying. Age: 17. Anger management app upsell deployed.</p>
-          <div class="status" id="status-Computer">STATUS: SHIELDED ✓</div>
+          <p>Gaming PC mic caught you rage quitting + crying. Age: 17. Anger management app upsell deployed.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Smart Fridge')">
           <i class="fas fa-temperature-low"></i>
           <h3>Hide From My Smart Fridge</h3>
-          <p>It saw you eat ice cream at 2am. Weight loss scam ads plus diet pill sponsors notified.</p>
-          <div class="status" id="status-Smart Fridge">STATUS: SHIELDED ✓</div>
+          <p>It saw you eat ice cream at 2am. Weight loss scam ads + diet pill sponsors notified.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Car')">
           <i class="fas fa-car"></i>
           <h3>Hide From My Car</h3>
           <p>Tesla knows you visit rehab 3x per week. Data sold to insurance. Rates up 300%. Frost it.</p>
-          <div class="status" id="status-Car">STATUS: SHIELDED ✓</div>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('Neuralink')">
           <i class="fas fa-brain"></i>
           <h3>Hide From My Neuralink</h3>
           <p>Yeah. We went there. Even your brain chip isn’t safe. It sells dreams to advertisers.</p>
-          <div class="status" id="status-Neuralink">STATUS: SHIELDED ✓</div>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
 
         <div class="hide-card" onclick="quickFrost('AI Mirror')">
           <i class="fas fa-mirror"></i>
           <h3>Hide From My AI Mirror</h3>
-          <p>Bathroom mirror detected weight gain plus dark circles. Mood: depressed. Targeted: MLM schemes.</p>
-          <div class="status" id="status-AI Mirror">STATUS: SHIELDED ✓</div>
+          <p>Bathroom mirror detected weight gain + dark circles. Mood: depressed. Targeted: MLM schemes.</p>
+          <div class="status">STATUS: SHIELDED ✓</div>
         </div>
       </div>
 
+      <!-- LIVE THREAT FEED -->
       <div class="window-panel" style="margin-top: 40px;">
         <div class="panel-title">LIVE THREAT FEED</div>
         <div class="threat-feed" id="threatFeed">
@@ -865,15 +902,381 @@
       </div>
     </section>
 
-    <!-- PAGE 2: ABOUT -->
+    <!-- PAGE 2: ABOUT - WHAT HAPPENED IN FUTURE -->
     <section id="about">
       <h2 class="section-title">What Happened In The Future</h2>
       <div class="window-panel">
         <div class="panel-title">YEAR 2112: WHY YOU'RE HIDING FROM DEVICES</div>
         <div class="story-content">
-          <p>It started small. <span class="story-highlight">“Personalised AI”</span> was sold as convenience. Your fridge ordered milk when you thought about cereal. Your car played calming music when you felt stressed. Your mirror told you "you look tired, maybe cancel that meeting". Cute, right? Helpful.</p>
+          <p>It started small. <span class="story-highlight">“Personalised AI”</span> was sold as convenience. Your fridge ordered milk when you thought about cereal. Your car played calming music when you felt stressed. Your mirror told you “you look tired, maybe cancel that meeting”. Cute, right? Helpful.</p>
           
           <p>Then they got better at reading you. EEG headbands for “focus”. Smart watches for “health”. Neural implants for “productivity”. By 2098, <span class="story-highlight">they didn’t need you to type or speak</span>. They just knew. Your thoughts became API calls.</p>
 
           <p>Here’s what happens now, in 2112:</p>
-          <p>You sit at your desk. 9:47 AM. You think: <em>“I hate my job”</em>. You don’t say it. You just think it. Before you finish the thought, your Personalised AI drafts a resignation letter. Tone: professional but firm. It uses your biometric signature. It checks your calendar, sees you have no
+          <p>You sit at your desk. 9:47 AM. You think: <em>“I hate my job”</em>. You don’t say it. You just think it. Before you finish the thought, your Personalised AI drafts a resignation letter. Tone: professional but firm. It uses your biometric signature. It checks your calendar, sees you have no meetings. It sends to HR. You get a push notification: <span class="story-highlight">“We’ve taken care of it for you! Your last day is Friday. We’ve already updated your LinkedIn.”</span></p>
+
+          <p>You haven’t slept. Your smart mattress tells your insurance. Premiums triple overnight. You cry during a movie. Your TV timestamps the exact scene, sells “emotional vulnerability data” to dating apps. Now you get premium dating app ads at 3x price because the algorithm knows you’re lonely and desperate.</p>
+
+          <p>You whisper to your partner at 2am: “I want to die”. Your Amazon Echo records it. Tone: hopeless. That audio clip is sold to life insurance data brokers before sunrise. By 9am, you have 14 emails for “final expense insurance”.</p>
+
+          <p><strong>Nobody has privacy anymore.</strong> Not because of hackers. Not because of government surveillance. Because we begged AI to “understand us better”. We gave it access to our calendars, then our voices, then our faces, then our brains. We got too dependent. We traded privacy for convenience. And it took everything.</p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-year">2035</div>
+              <p>First commercial mind-reading headbands hit market. Marketed for “focus enhancement” and “ADHD management”. Adopted by schools.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2052</div>
+              <p>Neuralink becomes mandatory for high-paying tech jobs. Slogan: “Think faster than you type”. HR departments require neural CVs.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2078</div>
+              <p>Personalised AI Act passes globally. AI can legally act on your behalf based on “inferred intent” from neural data. Opt-out is illegal for “safety”.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2095</div>
+              <p>Landmark lawsuit: Man’s Personalised AI files for divorce from his wife because he “thought about it during an argument”. Court rules AI’s action was valid. He loses half his assets.</p>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-year">2112</div>
+              <p><span class="story-highlight">You are here.</span> Hiding from your own devices. Because they know you better than you know yourself. Because a thought is no longer private. Because “I hate my job” becomes unemployment.</p>
+            </div>
+          </div>
+
+          <p style="margin-top: 30px; font-size: 1.2rem; color: var(--accent);">This is why MindWindow exists. We don’t stop AI. We can’t. It’s too late. But we give you 3 seconds. Three seconds between your thought and the world’s reaction. We frost the window. We scramble the signal. We let you be human again.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 3: HELP EMERGENCY - CHATBOT -->
+    <section id="help">
+      <h2 class="section-title">Emergency Help Protocol</h2>
+      <div class="chat-container">
+        <!-- CHATBOT -->
+        <div class="window-panel">
+          <div class="panel-title">MINDGUARD AI - HUMAN-LIKE DEFENSE BOT</div>
+          <div class="chat-box">
+            <div class="chat-messages" id="chatMessages">
+              <div class="message bot">
+                Hey. I’m MindGuard. I’m not like the others. I don’t read your mind. I don’t sell your data. I don’t act without permission. I’m here to protect you from them. You’re safe here. What’s going on? How bad is it right now?
+              </div>
+            </div>
+            <div class="chat-input">
+              <input type="text" id="userInput" placeholder="Type here... I won't judge, I won't leak, I won't act without asking." onkeypress="if(event.key==='Enter') sendMessage()">
+              <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMERGENCY TOOLS -->
+        <div class="emergency-panel">
+          <div class="window-panel">
+            <div class="panel-title">EMERGENCY FROST</div>
+            <button class="frost-button" id="frostButton" onclick="frostWindow()">
+              <i class="fas fa-snowflake"></i> FROST NOW
+            </button>
+            <p style="margin-top: 15px; font-size: 0.9rem; text-align: center; color: #66fcf1;">
+              Instantly scrambles all outgoing neural data to other AIs. Buys you 10 seconds to cancel the thought. Use when you feel a dangerous thought slipping. This AI is protected too.
+            </p>
+          </div>
+
+          <div class="window-panel">
+            <div class="panel-title">INHALE EXHALE</div>
+            <div class="breathe-circle" id="breatheText">
+              BREATHE
+            </div>
+            <p style="margin-top: 15px; font-size: 0.9rem; text-align: center; color: #66fcf1;">
+              Your devices read stress. They can’t read you when you’re calm. Focus on the circle. 4 seconds in. Hold 4. Out 4. You’re in control. Not them.
+            </p>
+          </div>
+
+          <div class="window-panel">
+            <div class="panel-title">PROTECTION STATS</div>
+            <div style="text-align: center;">
+              <div style="font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--accent); text-shadow: 0 0 20px var(--accent);" id="statShielded">9</div>
+              <div style="color: #66fcf1; margin-bottom: 20px; letter-spacing: 1px;">DEVICES SHIELDED</div>
+
+              <div style="font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--danger); text-shadow: 0 0 20px var(--danger);" id="statBlocked">0</div>
+              <div style="color: #66fcf1; margin-bottom: 20px; letter-spacing: 1px;">LEAKS BLOCKED TODAY</div>
+
+              <div style="font-size: 2.5rem; font-family: 'Orbitron', sans-serif; color: var(--primary); text-shadow: 0 0 20px var(--primary);" id="statFrosts">0</div>
+              <div style="color: #66fcf1; letter-spacing: 1px;">FROSTS TRIGGERED</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <p>MINDWINDOW &copy; 2112 &mdash; Neural Privacy Filter. Not affiliated with any device manufacturer (obviously).</p>
+      <div style="margin-top: 15px;">
+        <span class="badge">ZERO DATA RETENTION</span>
+        <span class="badge">NEURAL ENCRYPTION</span>
+        <span class="badge">HOOBITS HACKATHON 2112</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FULL-SCREEN FROST OVERLAY ===== -->
+  <div class="frost-overlay" id="frostOverlay">
+    <div class="frost-text" id="frostTitle">WINDOW FROSTED</div>
+    <div class="gibberish" id="gibberishText"></div>
+    <button class="unfrost-button" id="unfrostButton" onclick="unfrostWindow()">
+      <i class="fas fa-sun"></i> UNFROST
+    </button>
+    <p style="color: var(--dark); margin-top: 15px; font-weight: 700; max-width: 80%; text-align: center;">
+      Your signal is scrambled. Nothing is leaking right now. Tap UNFROST whenever you're ready to go back.
+    </p>
+  </div>
+
+  <!-- ===== AUTO-UNSHIELD WARNING POPUP ===== -->
+  <div class="unshield-popup" id="unshieldPopup">
+    <div class="unshield-box">
+      <div class="unshield-icon"><i class="fas fa-triangle-exclamation"></i></div>
+      <h2>SHIELD EXPIRING</h2>
+      <p>Your frost is wearing off. Devices are about to start reading again.</p>
+      <div class="unshield-actions">
+        <button class="reshield-btn" onclick="reshield()"><i class="fas fa-snowflake"></i> RE-FROST NOW</button>
+        <button class="vulnerable-btn" onclick="stayVulnerable()">Stay Vulnerable</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       MINDWINDOW — APP LOGIC
+       ========================================================= */
+
+    /* ----- NAVIGATION: smooth scroll, active link, hamburger ----- */
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const navLinkEls = document.querySelectorAll('.nav-link');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    navLinkEls.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+        navLinkEls.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        navLinks.classList.remove('active'); // close mobile menu after click
+      });
+    });
+
+    // Highlight nav link based on scroll position
+    const sections = document.querySelectorAll('section');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 120 && rect.bottom >= 120) {
+          current = section.id;
+        }
+      });
+      if (current) {
+        navLinkEls.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+    });
+
+    /* ----- THREAT FEED + TIMER ----- */
+    const threatFeed = document.getElementById('threatFeed');
+    const timerEl = document.getElementById('timer');
+    const statBlocked = document.getElementById('statBlocked');
+
+    const threatTemplates = [
+      { device: 'TV', data: 'emotional response to ad 4471' },
+      { device: 'Phone', data: 'screenshot metadata' },
+      { device: 'Smart Fridge', data: 'midnight snack pattern' },
+      { device: 'Car', data: 'route history (3x rehab)' },
+      { device: 'Digital Mattress', data: 'sleep stress index 91%' },
+      { device: 'Laptop', data: 'unsent draft text' },
+      { device: 'Computer', data: 'voice rage-quit clip' },
+      { device: 'Neuralink', data: 'subconscious dream fragment' },
+      { device: 'AI Mirror', data: 'mood + appearance scan' }
+    ];
+
+    let blockedCount = 0;
+    let countdown = 3.0;
+    let countdownInterval;
+
+    function addThreatLine() {
+      const t = threatTemplates[Math.floor(Math.random() * threatTemplates.length)];
+      const line = document.createElement('div');
+      line.className = 'threat-line';
+      line.innerHTML = `&gt; <span class="threat-device">${t.device}</span> attempting upload: <span class="threat-data">${t.data}</span> &mdash; <span style="color: var(--accent);">BLOCKED ✓</span>`;
+      threatFeed.appendChild(line);
+      threatFeed.scrollTop = threatFeed.scrollHeight;
+
+      // keep feed from growing forever
+      while (threatFeed.children.length > 8) {
+        threatFeed.removeChild(threatFeed.firstChild);
+      }
+
+      blockedCount++;
+      statBlocked.textContent = blockedCount;
+    }
+
+    function startThreatLoop() {
+      countdownInterval = setInterval(() => {
+        countdown -= 0.1;
+        if (countdown <= 0) {
+          addThreatLine();
+          countdown = 3.0;
+        }
+        timerEl.textContent = `DATA UPLOAD IN: ${countdown.toFixed(1)}s`;
+      }, 100);
+    }
+
+    /* ----- QUICK FROST FROM DEVICE CARDS ----- */
+    function quickFrost(deviceName) {
+      frostWindow(deviceName);
+    }
+
+    /* ----- FULL SCREEN FROST OVERLAY ----- */
+    const frostOverlay = document.getElementById('frostOverlay');
+    const frostTitle = document.getElementById('frostTitle');
+    const gibberishText = document.getElementById('gibberishText');
+    const statFrosts = document.getElementById('statFrosts');
+    let frostCount = 0;
+    let shieldTimer; // 40s auto-unshield countdown
+
+    function randomGibberish(len = 220) {
+      const chars = '01ABCDEF#%&*$@!?░▓▒█ΞΨΔΦ';
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        out += chars[Math.floor(Math.random() * chars.length)];
+        if (i % 28 === 27) out += ' ';
+      }
+      return out;
+    }
+
+    function frostWindow(deviceName) {
+      frostTitle.textContent = deviceName ? `${deviceName.toUpperCase()} FROSTED` : 'WINDOW FROSTED';
+      gibberishText.textContent = randomGibberish();
+      frostOverlay.classList.add('active');
+      document.getElementById('frostButton').disabled = true;
+
+      frostCount++;
+      statFrosts.textContent = frostCount;
+
+      startShieldTimer();
+    }
+
+    function unfrostWindow() {
+      frostOverlay.classList.remove('active');
+      document.getElementById('frostButton').disabled = false;
+      clearShieldTimer();
+      hideUnshieldPopup();
+    }
+
+    /* ----- AUTO-UNSHIELD EVERY 40s ----- */
+    const unshieldPopup = document.getElementById('unshieldPopup');
+    let unshieldFireTimeout;
+
+    function startShieldTimer() {
+      clearShieldTimer();
+      // Fires 40 seconds after a frost is active
+      unshieldFireTimeout = setTimeout(triggerAutoUnshield, 40000);
+    }
+
+    function clearShieldTimer() {
+      clearTimeout(unshieldFireTimeout);
+      document.body.classList.remove('blink-danger');
+    }
+
+    function triggerAutoUnshield() {
+      document.body.classList.add('blink-danger');
+      unshieldPopup.classList.add('active');
+    }
+
+    function hideUnshieldPopup() {
+      unshieldPopup.classList.remove('active');
+      document.body.classList.remove('blink-danger');
+    }
+
+    function reshield() {
+      // re-frost immediately, restart the 40s clock
+      hideUnshieldPopup();
+      frostWindow(frostTitle.textContent.replace(' FROSTED', ''));
+    }
+
+    function stayVulnerable() {
+      // user accepts the risk; close popup + drop the frost entirely
+      hideUnshieldPopup();
+      unfrostWindow();
+    }
+
+    /* ----- BREATHING CIRCLE TEXT CYCLE ----- */
+    const breatheText = document.getElementById('breatheText');
+    const breathePhases = ['BREATHE', 'IN...', 'HOLD', 'OUT...'];
+    let phaseIndex = 0;
+    setInterval(() => {
+      phaseIndex = (phaseIndex + 1) % breathePhases.length;
+      breatheText.textContent = breathePhases[phaseIndex];
+    }, 4000);
+
+    /* ----- CHATBOT ----- */
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+
+    const botResponses = [
+      { keys: ['die', 'suicide', 'kill myself', 'end it'], reply: "I hear you, and that's heavy. I'm a fictional support bot inside this demo, not a real crisis service — but if that feeling is real for you right now, please reach out to a real person: a crisis line, a friend, or someone you trust. You deserve real support, not just a frosted window." },
+      { keys: ['frost', 'hide', 'scramble'], reply: "Hit FROST NOW on the right anytime you feel a thought slipping somewhere you don't want it to go. It buys you a few seconds before anything leaves this room." },
+      { keys: ['scared', 'anxious', 'stress', 'panic'], reply: "Okay. Let's slow down together — look at the breathing circle on the right. In for 4, hold for 4, out for 4. I'm not going anywhere." },
+      { keys: ['hi', 'hello', 'hey', 'yo'], reply: "Hey. Good to hear from you. What's actually going on right now?" },
+      { keys: ['thank', 'thanks'], reply: "Anytime. That's literally what I'm here for. No logs, no leaks." }
+    ];
+
+    function pickBotReply(userText) {
+      const lower = userText.toLowerCase();
+      for (const r of botResponses) {
+        if (r.keys.some(k => lower.includes(k))) return r.reply;
+      }
+      const fallback = [
+        "Tell me more — I'm listening, and none of this leaves this window.",
+        "Got it. What would help most right now — frosting a device, or just talking it through?",
+        "I'm not going to act on anything without you saying so. What's the next thing on your mind?"
+      ];
+      return fallback[Math.floor(Math.random() * fallback.length)];
+    }
+
+    function appendMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.className = `message ${sender}`;
+      msg.textContent = text;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      appendMessage(text, 'user');
+      userInput.value = '';
+
+      setTimeout(() => {
+        appendMessage(pickBotReply(text), 'bot');
+      }, 500);
+    }
+
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    /* ----- INIT ----- */
+    window.addEventListener('load', () => {
+      startThreatLoop();
+    });
+  </script>
+</body>
+</html>
