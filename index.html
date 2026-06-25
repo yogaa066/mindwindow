@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindWindow | Neural Privacy Filter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0f;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(0, 100, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 255, 200, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, #0a0a0f 0%, #000000 100%);
+      color: #00e5ff;
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* UPGRADE 4: Boot Screen */
+    #bootScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      animation: bootFade 2.5s forwards;
+    }
+
+    @keyframes bootFade {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    .boot-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      color: #00e5ff;
+      text-shadow: 0 0 30px #00e5ff;
+      margin-bottom: 20px;
+      animation: bootGlow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes bootGlow {
+      from { text-shadow: 0 0 20px #00e5ff; }
+      to { text-shadow: 0 0 40px #00e5ff, 0 0 60px #0088ff; }
+    }
+
+    .boot-text {
+      color: #66fcf1;
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .boot-bar {
+      width: 300px;
+      height: 4px;
+      background: rgba(0, 229, 255, 0.2);
+      margin-top: 30px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .boot-progress {
+      height: 100%;
+      background: linear-gradient(90deg, #00e5ff, #00ff88);
+      width: 0%;
+      animation: loadBar 2s forwards;
+      box-shadow: 0 0 10px #00e5ff;
+    }
+
+    @keyframes loadBar {
+      to { width: 100%; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: rgba(0, 20, 40, 0.3);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.1), inset 0 0 20px rgba(0, 229, 255, 0.05);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-shadow: 0 0 20px #00e5ff, 0 0 40px #00e5ff;
+      margin-bottom: 10px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #00e5ff, 0 0 40px #00e5ff; }
+      to { text-shadow: 0 0 30px #00e5ff, 0 0 60px #00e5ff, 0 0 80px #0088ff; }
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      color: #66fcf1;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00ff88;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard { grid-template-columns: 1fr; }
+      .logo { font-size: 2rem; }
+    }
+
+    .window-panel {
+      background: rgba(10, 25, 47, 0.4);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      border-radius: 12px;
+      padding: 25px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(0, 229, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .window-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+      animation: scan 3s infinite;
+    }
+
+    @keyframes scan {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .panel-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #66fcf1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-title::before {
+      content: "▸";
+      color: #00e5ff;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .threat-feed {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 0, 100, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 140px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+
+    .threat-line {
+      margin: 8px 0;
+      opacity: 0;
+      animation: typeIn 0.5s forwards;
+    }
+
+    @keyframes typeIn {
+      to { opacity: 1; }
+    }
+
+    .threat-device {
+      color: #ff3366;
+      font-weight: 700;
+    }
+
+    .threat-data {
+      color: #ffaa00;
+    }
+
+    .timer {
+      margin-top: 15px;
+      font-size: 2rem;
+      font-family: 'Orbitron', sans-serif;
+      color: #ff3366;
+      text-align: center;
+      text-shadow: 0 0 15px #ff3366;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .stat-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #66fcf1;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* UPGRADE 3: Device Grid */
+    .device-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+
+    .device-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .device-item:hover {
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .frost-container {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px 25px;
+    }
+
+    .frost-button {
+      background: linear-gradient(135deg, #ff0844 0%, #ff3366 100%);
+      border: 3px solid #ff3366;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      padding: 25px 60px;
+      border-radius: 15px;
+      cursor: pointer;
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 30px rgba(255, 51, 102, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .frost-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 50px rgba(255, 51, 102, 0.8), inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .frost-button:active {
+      transform: scale(0.98);
+    }
+
+    .frost-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .frost-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 229, 255, 0.95);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      backdrop-filter: blur(20px);
+    }
+
+    .frost-overlay.active {
+      display: flex;
+      animation: frostIn 0.3s ease-out;
+    }
+
+    @keyframes frostIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .frost-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: #0a0a0f;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+      animation: iceBreak 0.6s ease-out;
+    }
+
+    @keyframes iceBreak {
+      0% { transform: scale(0) rotate(-180deg); }
+      50% { transform: scale(1.2) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .gibberish {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      color: #0a0a0f;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-break: break-all;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #445;
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(0, 229, 255, 0.1);
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin: 5px;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- UPGRADE 4: Boot Screen -->
+  <div id="bootScreen">
+    <div class="boot-logo">MINDWINDOW</div>
+    <div class="boot-text">INITIALIZING NEURAL PRIVACY FILTER...</div>
+    <div class="boot-bar"><div class="boot-progress"></div></div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="logo">MINDWINDOW</div>
+      <div class="tagline">NEURAL PRIVACY FILTER // AI APOCALYPSE DEFENSE SYSTEM</div>
+      <div class="status-bar">
+        <div class="status-item">
+          <div class="status-dot"></div>
+          <span>SYSTEM ACTIVE</span>
+        </div>
+        <div class="status-item">
+          <span>DEVICES MONITORED: 12</span>
+        </div>
+        <div class="status-item">
+          <span>v2.1.0 BETA</span>
+        </div>
+        <div class="status-item">
+          <span>ENCRYPTION: AES-256</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="window-panel">
+        <div class="panel-title">LIVE THREAT FEED</div>
+        <div class="threat-feed" id="threatFeed">
+          <div class="threat-line">> Initializing neural scan...</div>
+        </div>
+        <div class="timer" id="timer">DATA UPLOAD IN: 3.0s</div>
+      </div>
+
+      <div class="window-panel">
+        <div class="panel-title">PRIVACY STATS</div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="stat-number" id="frostedCount">47</div>
+            <div class="stat-label">Threats Frosted Today</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="dataSaved">2.4GB</div>
+            <div class="stat-label">Data Protected</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="devices">12</div>
+            <div class="stat-label">Devices Shielded</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="avgTime">1.8s</div>
+            <div class="stat-label">Avg Block Time</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPGRADE 3: Device Grid Panel -->
+      <div class="window-panel">
+        <div class="panel-title">SHIELDED DEVICES</div>
+        <div class="device-grid">
+          <div class="device-item">📺 Samsung TV ✓</div>
+          <div class="device-item">⌚ Apple Watch ✓</div>
+          <div class="device-item">🚗 Tesla ✓</div>
+          <div class="device-item">❄️ Smart Fridge ✓</div>
+          <div class="device-item">🪞 AI Mirror ✓</div>
+          <div class="device-item">🔊 Echo Dot ✓</div>
+          <div class="device-item">📱 iPhone ✓</div>
+          <div class="device-item">🎮 Xbox ✓</div>
+          <div class="device-item">🧠 Neuralink ✓</div>
+        </div>
+      </div>
+
+      <div class="window-panel frost-container">
+        <div class="panel-title" style="justify-content: center;">EMERGENCY PROTOCOL</div>
+        <button class="frost-button" id="frostButton" onclick="frostWindow()">
+          FROST WINDOW
+        </button>
+        <p style="margin-top: 20px; color: #66fcf1; font-size: 0.9rem;">
+          ⚠️ Instantly scramble outgoing data before it reaches advertisers
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>
+        <span class="badge">HOOBIT HACKS 2026</span>
+        <span class="badge">AI APOCALYPSE THEME</span>
+        <span class="badge">CONCEPT DEMO</span>
+      </div>
+      <!-- UPGRADE 1: Your name -->
+      <p style="margin-top: 15px;">Built in 10 days by Yogaashree, 17yo beginner from Bangalore. The future isn't written yet.</p>
+    </div>
+  </div>
+
+  <div class="frost-overlay" id="frostOverlay">
+    <div class="frost-text">❄ FROSTED ❄</div>
+    <div class="gibberish" id="gibberishText"></div>
+    <p style="color: #0a0a0f; margin-top: 20px; font-size: 1.3rem; font-weight: 700;">
+      DATA SCRAMBLED. ADVERTISERS RECEIVED: NOISE
+    </p>
+    <p style="color: #0a0a0f; margin-top: 10px;">
+      Your privacy: Protected. Your dignity: Intact.
+    </p>
+  </div>
+
+  <!-- UPGRADE 2: Sound Effect -->
+  <audio id="frostSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2ca4e2f4c8.mp3"></audio>
+
+  <script>
+    // UPGRADE 5: Scarier + more relatable threats
+    const threats = [
+      { device: "Samsung TV", data: "User crying during rom-com. Emotion: Lonely. Target: Dating app ads at 3x price." },
+      { device: "Instagram App", data: "Screenshot of pregnancy test detected. Target: Baby product ads before you tell family." },
+      { device: "Smart Speaker", data: "User whispered 'I want to die' at 2am. Target: Sold to life insurance data brokers." },
+      { device: "Fitness Ring", data: "Stress 90%, Sleep 3hrs, HRV critical. Target: Pharma ads for antidepressants." },
+      { device: "Car GPS", data: "Daily route: Rehab center. Frequency: 3x/week. Target: Addiction treatment mailing lists." },
+      { device: "Bathroom AI Mirror", data: "Detected weight gain + dark circles. Mood: Depressed. Target: Weight loss scams." },
+      { device: "Amazon Echo", data: "User: 'I hate my job'. Tone: Desperate. Target: Predatory loan ads + MLM schemes." },
+      { device: "Xbox Series X", data: "Rage quit + crying detected via mic. Age: 17. Target: Anger management app upsell." }
+    ];
+
+    let currentThreat = 0;
+    let frostedCount = 47;
+    let countdownTimer = null;
+    let timeLeft = 3.0;
+
+    function updateThreatFeed() {
+      const feed = document.getElementById('threatFeed');
+      const threat = threats[currentThreat % threats.length];
+      
+      feed.innerHTML = `
+        <div class="threat-line">
+          > <span class="threat-device">[${threat.device}]</span> analyzing:
+        </div>
+        <div class="threat-line">
+          > <span class="threat-data">"${threat.data}"</span>
+        </div>
+        <div class="threat-line" style="color: #ff3366;">
+          > ⚠️ UPLOAD TO ADVERTISERS PENDING...
+        </div>
+      `;
+      
+      currentThreat++;
+      startCountdown();
+    }
+
+    function startCountdown() {
+      clearInterval(countdownTimer);
+      timeLeft = 2.3 + Math.random() * 1.5;
+      
+      countdownTimer = setInterval(() => {
+        timeLeft -= 0.1;
+        if (timeLeft <= 0) {
+          timeLeft = 0;
+          document.getElementById('timer').textContent = "DATA LEAKED!";
+          document.getElementById('timer').style.color = "#ff0000";
+          setTimeout(updateThreatFeed, 2000);
+        } else {
+          document.getElementById('timer').textContent = `DATA UPLOAD IN: ${timeLeft.toFixed(1)}s`;
+          document.getElementById('timer').style.color = timeLeft < 1 ? "#ff3366" : "#ffaa00";
+        }
+      }, 100);
+    }
+
+    function generateGibberish() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/";
+      let result = "";
+      for (let i = 0; i < 300; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    function frostWindow() {
+      // UPGRADE 2: Play sound
+      document.getElementById('frostSound').play().catch(e => console.log("Audio play failed:", e));
+      
+      clearInterval(countdownTimer);
+      document.getElementById('frostButton').disabled = true;
+      
+      const overlay = document.getElementById('frostOverlay');
+      document.getElementById('gibberishText').textContent = generateGibberish();
+      overlay.classList.add('active');
+      
+      frostedCount++;
+      document.getElementById('frostedCount').textContent = frostedCount;
+      document.getElementById('dataSaved').textContent = (2.4 + frostedCount * 0.05).toFixed(1) + "GB";
+      document.getElementById('avgTime').textContent = (1.5 + Math.random() * 0.8).toFixed(1) + "s";
+      
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        document.getElementById('frostButton').disabled = false;
+        updateThreatFeed();
+      }, 3000);
+    }
+
+    // Start after boot screen
+    setTimeout(() => {
+      updateThreatFeed();
+    }, 2500);
+    
+    setInterval(() => {
+      if (!document.getElementById('frostOverlay').classList.contains('active')) {
+        updateThreatFeed();
+      }
+    }, 8000);
+  </script>
+</body>
+</html>
